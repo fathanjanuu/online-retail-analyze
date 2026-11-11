@@ -11,6 +11,7 @@ The Online Retail dataset has over 540k transaction lines from a store that sell
 ## Business question
 
 TODO: pick one main goal, for example
+
 - customer segmentation (RFM + K-Means)
 - sales forecasting
 - market basket analysis (products bought together)
@@ -31,7 +32,7 @@ The details and code are in [`notebooks/01_data_understanding.ipynb`](notebooks/
 ```
 online-retail-analysis/
 ├── data/
-│   ├── raw/             # put Online_Retail.xlsx here (not tracked)
+│   ├── raw/             # put Online Retail.xlsx here (not tracked)
 │   └── processed/       # cleaned data (not tracked)
 ├── notebooks/
 │   └── 01_data_understanding.ipynb
@@ -53,7 +54,7 @@ online-retail-analysis/
 
 ## Roadmap
 
-- [x] 01 - Data understanding
+- [X] 01 - Data understanding
 - [ ] 00 - Decide the goal and fill in the business question above
 - [ ] 02 - Data cleaning (output goes to `data/processed/`)
 - [ ] 03 - Feature engineering
