@@ -52,17 +52,6 @@ online-retail-analysis/
    ```
 3. Run `jupyter lab` and open the notebooks in `notebooks/` in order.
 
-## Roadmap
-
-- [X] 01 - Data understanding
-- [ ] 00 - Decide the goal and fill in the business question above
-- [ ] 02 - Data cleaning (output goes to `data/processed/`)
-- [ ] 03 - Feature engineering
-- [ ] 04 - Exploratory data analysis
-- [ ] 05 - Core analysis / modeling
-- [ ] 06 - Insights and recommendations
-- [ ] 07 - Final README with charts, then publish
-
 ## Data source
 
 Chen, D. (2015). Online Retail [Dataset]. UCI Machine Learning Repository. See the UCI page for license terms.
