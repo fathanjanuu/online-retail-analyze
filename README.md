@@ -2,7 +2,7 @@
 
 An analysis of transaction data from a UK-based online store (Dec 2010 to Dec 2011), done in Python with pandas.
 
-Status: work in progress. The data understanding step is done, cleaning is next.
+Status: work in progress. Data understanding and data cleaning are done, feature engineering (RFM) is next.
 
 ## Background
 
@@ -10,11 +10,7 @@ The Online Retail dataset has over 540k transaction lines from a store that sell
 
 ## Business question
 
-TODO: pick one main goal, for example
-
-- customer segmentation (RFM + K-Means)
-- sales forecasting
-- market basket analysis (products bought together)
+Who are the most valuable customers, who is at risk of leaving, and how should each group be treated? To answer this I segment customers with RFM (Recency, Frequency, Monetary) and K-Means.
 
 ## What I found so far
 
@@ -27,15 +23,28 @@ TODO: pick one main goal, for example
 
 The details and code are in [`notebooks/01_data_understanding.ipynb`](notebooks/01_data_understanding.ipynb).
 
+## Cleaning result
+
+Every raw row ends up in exactly one table ([`notebooks/02_data_cleaning.ipynb`](notebooks/02_data_cleaning.ipynb)):
+
+| Table                                                                                                     | Rows    | Share  |
+| --------------------------------------------------------------------------------------------------------- | ------- | ------ |
+| `sales_clean`                                                                                           | 522,500 | 96.42% |
+| `cancellations`                                                                                         | 9,286   | 1.71%  |
+| `excluded_rows` (duplicates, non-product codes, stock adjustments, zero price, extreme pairs, bad debt) | 10,123  | 1.87%  |
+
+The clean sales table has 19,771 invoices, 4,333 customers and 3,790 products, and covers about 10.0 million in revenue. About 25% of its rows (131,354) have no `CustomerID`, but they only make up about 15% of the revenue. They stay in the sales table and are left out of the RFM step. Every saved row keeps its raw row number in a `raw_index` column, so it can be traced back to the raw file.
+
 ## Repo structure
 
 ```
 online-retail-analysis/
 ├── data/
 │   ├── raw/             # put Online Retail.xlsx here (not tracked)
-│   └── processed/       # cleaned data (not tracked)
+│   └── processed/       # created by notebook 02 (not tracked)
 ├── notebooks/
-│   └── 01_data_understanding.ipynb
+│   ├── 01_data_understanding.ipynb
+│   └── 02_data_cleaning.ipynb
 ├── reports/             # final charts and summaries
 ├── requirements.txt
 └── README.md
@@ -43,15 +52,17 @@ online-retail-analysis/
 
 ## How to run
 
-1. Download the dataset from [UCI Online Retail](https://archive.ics.uci.edu/dataset/352/online+retail) and save it as `data/raw/Online_Retail.xlsx`.
+1. Download the dataset from [UCI Online Retail](https://archive.ics.uci.edu/dataset/352/online+retail) and save it as `data/raw/Online Retail.xlsx`.
 2. Create an environment and install the dependencies:
    ```bash
    python -m venv .venv
    # Windows: .venv\Scripts\activate    |  macOS/Linux: source .venv/bin/activate
    pip install -r requirements.txt
    ```
-3. Run `jupyter lab` and open the notebooks in `notebooks/` in order.
+3. Run `jupyter lab` and run the notebooks in `notebooks/` in order. Notebook 02 creates the files in `data/processed/`, so it has to run before the later ones.
 
 ## Data source
 
-Chen, D. (2015). Online Retail [Dataset]. UCI Machine Learning Repository. See the UCI page for license terms.
+Chen, D. (2015). Online Retail [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5BW33
+
+The dataset is not included in this repo. It is licensed under CC BY 4.0 by its creator.
