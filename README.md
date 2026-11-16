@@ -2,7 +2,7 @@
 
 An analysis of transaction data from a UK-based online store (Dec 2010 to Dec 2011), done in Python with pandas.
 
-Status: work in progress. Data understanding and data cleaning are done, feature engineering (RFM) is next.
+Status: work in progress. Data understanding, data cleaning and feature engineering (RFM) are done, exploratory analysis is next.
 
 ## Background
 
@@ -35,16 +35,29 @@ Every raw row ends up in exactly one table ([`notebooks/02_data_cleaning.ipynb`]
 
 The clean sales table has 19,771 invoices, 4,333 customers and 3,790 products, and covers about 10.0 million in revenue. About 25% of its rows (131,354) have no `CustomerID`, but they only make up about 15% of the revenue. They stay in the sales table and are left out of the RFM step. Every saved row keeps its raw row number in a `raw_index` column, so it can be traced back to the raw file.
 
+## RFM table
+
+[`notebooks/03_feature_engineering.ipynb`](notebooks/03_feature_engineering.ipynb) turns the clean sales into one row per customer:
+
+| Column        | Meaning                                                                                                           |
+| ------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `Recency`   | Days between the reference date (2011-12-10, one day after the last transaction) and the customer's last purchase |
+| `Frequency` | Number of different invoices                                                                                      |
+| `Monetary`  | Total spent on products, after subtracting the cancellations of real products                                     |
+
+The final table has 4,320 customers. 13 customers were dropped because they returned everything they bought (a net Monetary of zero or less). All three columns are strongly skewed to the right: the median customer spent about 650, while the biggest one spent about 278,778.
+
 ## Repo structure
 
 ```
 online-retail-analysis/
 ├── data/
 │   ├── raw/             # put Online Retail.xlsx here (not tracked)
-│   └── processed/       # created by notebook 02 (not tracked)
+│   └── processed/       # created by notebooks 02 and 03 (not tracked)
 ├── notebooks/
 │   ├── 01_data_understanding.ipynb
-│   └── 02_data_cleaning.ipynb
+│   ├── 02_data_cleaning.ipynb
+│   └── 03_feature_engineering.ipynb
 ├── reports/             # final charts and summaries
 ├── requirements.txt
 └── README.md
@@ -59,7 +72,7 @@ online-retail-analysis/
    # Windows: .venv\Scripts\activate    |  macOS/Linux: source .venv/bin/activate
    pip install -r requirements.txt
    ```
-3. Run `jupyter lab` and run the notebooks in `notebooks/` in order. Notebook 02 creates the files in `data/processed/`, so it has to run before the later ones.
+3. Run `jupyter lab` and run the notebooks in `notebooks/` in order. Notebook 02 creates the files in `data/processed/`, and notebook 03 uses them, so they have to run in order.
 
 ## Data source
 
