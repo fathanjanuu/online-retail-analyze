@@ -2,7 +2,7 @@
 
 An analysis of transaction data from a UK-based online store (Dec 2010 to Dec 2011), done in Python with pandas.
 
-Status: work in progress. Data understanding, data cleaning and feature engineering (RFM) are done, exploratory analysis is next.
+Status: work in progress. Data understanding, data cleaning, feature engineering (RFM) and exploratory analysis are done, customer segmentation is next.
 
 ## Background
 
@@ -45,7 +45,23 @@ The clean sales table has 19,771 invoices, 4,333 customers and 3,790 products, a
 | `Frequency` | Number of different invoices                                                                                      |
 | `Monetary`  | Total spent on products, after subtracting the cancellations of real products                                     |
 
-The final table has 4,320 customers. 13 customers were dropped because they returned everything they bought (a net Monetary of zero or less). All three columns are strongly skewed to the right: the median customer spent about 650, while the biggest one spent about 278,778.
+The final table has 4,320 customers. 13 customers were dropped because they returned everything they bought (a net Monetary of zero or less).
+
+## Exploratory analysis
+
+[`notebooks/04_eda.ipynb`](notebooks/04_eda.ipynb) explores the clean data with charts. The main points:
+
+- Revenue peaks in November 2011 (1.45 million). December 2011 only looks low because the data stops on 9 December. Per active day it is almost the same as November.
+- The UK brings in 84.77% of the revenue. No single product dominates: the top 10 bring in 8.22% of the revenue.
+- Thursday is the busiest day, there are no invoices on Saturday, and about 78% of the invoices are made between 10:00 and 15:59.
+- Recency, Frequency and Monetary are strongly skewed to the right, so I use a log transform before clustering.
+- The value is concentrated: the top 10% of the customers bring in 60.1% of the Monetary value, and the bottom half only 8.1%.
+
+![Monthly revenue](reports/monthly_revenue.png)
+
+![RFM distributions](reports/rfm_distributions.png)
+
+![Customer value concentration](reports/customer_value_concentration.png)
 
 ## Repo structure
 
@@ -57,8 +73,9 @@ online-retail-analysis/
 ├── notebooks/
 │   ├── 01_data_understanding.ipynb
 │   ├── 02_data_cleaning.ipynb
-│   └── 03_feature_engineering.ipynb
-├── reports/             # final charts and summaries
+│   ├── 03_feature_engineering.ipynb
+│   └── 04_eda.ipynb
+├── reports/             # charts saved by notebook 04
 ├── requirements.txt
 └── README.md
 ```
@@ -72,7 +89,7 @@ online-retail-analysis/
    # Windows: .venv\Scripts\activate    |  macOS/Linux: source .venv/bin/activate
    pip install -r requirements.txt
    ```
-3. Run `jupyter lab` and run the notebooks in `notebooks/` in order. Notebook 02 creates the files in `data/processed/`, and notebook 03 uses them, so they have to run in order.
+3. Run `jupyter lab` and run the notebooks in `notebooks/` in order. Notebook 02 creates the files in `data/processed/`, and notebooks 03 and 04 use them, so they have to run in order.
 
 ## Data source
 
